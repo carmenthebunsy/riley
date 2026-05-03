@@ -1,0 +1,4 @@
+[deploy]
+startCommand = "mkdir -p ~/.nanobot && cp config.json ~/.nanobot/config.json && nanobot gateway"
+healthcheckPath = ""
+restartPolicyType = "always"
