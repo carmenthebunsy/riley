@@ -1,0 +1,19 @@
+{
+  "providers": {
+    "anthropic": {
+      "apiKey": "${ANTHROPIC_API_KEY}"
+    }
+  },
+  "agents": {
+    "defaults": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6"
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "token": "${TELEGRAM_TOKEN}"
+    }
+  }
+}
