@@ -1,4 +1,4 @@
 [deploy]
-startCommand = "echo 'Starting...' && find / -name 'config.json' 2>/dev/null && echo 'Done finding'"
+startCommand = "mkdir -p ~/.nanobot && nanobot gateway"
 healthcheckPath = ""
 restartPolicyType = "always"
