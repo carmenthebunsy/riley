@@ -1,0 +1,4 @@
+nanobot-ai
+uvicorn
+starlette
+ 
