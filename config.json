@@ -13,7 +13,8 @@
   "channels": {
     "telegram": {
       "enabled": true,
-      "token": "${TELEGRAM_TOKEN}"
+      "token": "${TELEGRAM_TOKEN}",
+      "allowFrom": [8650442389]
     }
   }
 }
