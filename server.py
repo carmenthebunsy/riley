@@ -23,7 +23,12 @@ def write_config():
     telegram_token = os.environ.get("TELEGRAM_TOKEN", "")
     allow_from_raw = os.environ.get("TELEGRAM_ALLOW_FROM", "")
     allow_from = [x.strip() for x in allow_from_raw.split(",") if x.strip()]
- 
+
+    imap_host = os.environ.get("IMAP_HOST", "")
+    imap_port = int(os.environ.get("IMAP_PORT", "993"))
+    imap_user = os.environ.get("IMAP_USER", "")
+    imap_password = os.environ.get("IMAP_PASSWORD", "")
+
     config = {
         "providers": {
             "anthropic": {
@@ -36,17 +41,28 @@ def write_config():
                 "model": "claude-sonnet-4-6"
             }
         },
-        "channels": {
+      "channels": {
             "telegram": {
                 "enabled": True,
                 "token": telegram_token,
                 "allowFrom": allow_from
+            },
+            "email": {
+                "enabled": True,
+                "imap": {
+                    "host": imap_host,
+                    "port": imap_port,
+                    "username": imap_user,
+                    "password": imap_password,
+                    "tls": True
+                }
             }
         }
     }
  
-    CONFIG_FILE.write_text(json.dumps(config, indent=2))
+   CONFIG_FILE.write_text(json.dumps(config, indent=2))
     print(f"✅ Config written to {CONFIG_FILE}")
+    print(f"✅ IMAP configured: host={imap_host}, user={imap_user}"))
  
  
 # ── Gateway manager ──────────────────────────────────────────────────────────
@@ -59,10 +75,15 @@ class NanobotGateway:
         if self.process and self.process.returncode is None:
             return
         print("🐈 Starting nanobot gateway...")
-        self.process = await asyncio.create_subprocess_exec(
+
+     # Pass ALL environment variables explicitly to the subprocess
+        env = os.environ.copy()   
+     
+     self.process = await asyncio.create_subprocess_exec(
             "nanobot", "gateway",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.STDOUT,
+            env=env
         )
         self.status = "running"
         asyncio.create_task(self._stream_logs())
